@@ -2,15 +2,15 @@ from itertools import product, permutations
 import sympy as sp
 from sympy.combinatorics.permutations import Permutation
 
-def epsilon(n, idx):
+def LeviCivita(n, idx):
     """
     Returns the Levi-Civita symbol in the given number of dimensions with the specified indices.
     The indices should be a tuple or list of integers.
 
     Examples:
-    >>> epsilon(3, [0, 1, 2]) # returns 1
-    >>> epsilon(3, [1, 0, 2]) # returns -1
-    >>> epsilon(3, [0, 2, 2]) # returns 0
+    >>> LeviCivita(3, [0, 1, 2]) # returns 1
+    >>> LeviCivita(3, [1, 0, 2]) # returns -1
+    >>> LeviCivita(3, [0, 2, 2]) # returns 0
     """
     if len(idx) != n:
         raise ValueError("Number of indices must match the number of dimensions.")
@@ -18,14 +18,9 @@ def epsilon(n, idx):
         raise ValueError("Indices must be within the valid range.")
     if len(set(idx)) < n:
         return 0  # repeated index → 0
-
-    # parity via inversion count
-    inv = 0
-    a = tuple(idx)
-    for i in range(n - 1):
-        ai = a[i]
-        inv += sum(ai > a[j] for j in range(i + 1, n))
-    return -1 if (inv & 1) else 1
+    
+    perm = Permutation(idx)
+    return perm.signature()
 
 
 def perm_with_sign(t):
